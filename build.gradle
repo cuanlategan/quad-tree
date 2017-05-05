@@ -4,10 +4,17 @@ repositories {
     mavenCentral()
 }
 
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+    dependsOn 'cleanTest'
+}
+
 sourceSets {
     main {
         java {
-            srcDir 'src/'
+            srcDir "src/"
         }
     }
     test {

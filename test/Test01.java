@@ -28,8 +28,7 @@ public class Test01 {
         quadTree.addPoint(new Point2D(100,100));
 
         if ((quadTree.getNumItems() == 1)) {
-            throw new AssertionError();
-            //return;
+            return;
         }
         throw new AssertionError();
     }
