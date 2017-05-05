@@ -99,18 +99,27 @@ public class QuadTree {
         }
 
         if(getNumItems() == MAX_ITEMS){
-            switch (getDirection(p)) {
+            Direction dir = getDirection(p);
+            switch (dir) {
                 case NorthWest:
                     if(childNW == null){
-                        //TODO Continue working here
-                        //Rectangle r = new Rectangle()
+                        childNW = createChildNode(dir);
                     }
                     break;
                 case NorthEast:
+                    if(childNE == null){
+                        childNE = createChildNode(dir);
+                    }
                     break;
                 case SouthEast:
+                    if(childSE == null){
+                        childSE = createChildNode(dir);
+                    }
                     break;
                 case SouthWest:
+                    if(childSW == null){
+                        childSW = createChildNode(dir);
+                    }
                     break;
             }
         }
