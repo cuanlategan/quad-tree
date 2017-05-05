@@ -1,8 +1,7 @@
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import java.awt.*;
 
 /**
  * Created by cuan on 5/4/17.
@@ -29,7 +28,8 @@ public class Test01 {
         quadTree.addPoint(new Point2D(100,100));
 
         if ((quadTree.getNumItems() == 1)) {
-            return;
+            throw new AssertionError();
+            //return;
         }
         throw new AssertionError();
     }
