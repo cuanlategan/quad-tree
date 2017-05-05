@@ -1,3 +1,5 @@
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Point2D;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -9,9 +11,9 @@ public class Test01 {
 
     @Test
     public void addBadPoint(){
-        Rectangle rectangle = new Rectangle(0,0,200,200);
-        QuadTree quadTree = new QuadTree(rectangle);
-        quadTree.addPoint(new Point(400,400));
+        BoundingBox bbox = new BoundingBox(0,0,200,200);
+        QuadTree quadTree = new QuadTree(bbox);
+        quadTree.addPoint(new Point2D(400,400));
 
         if ((quadTree.getNumItems() == 0)) {
             return;
@@ -22,9 +24,9 @@ public class Test01 {
 
     @Test
     public void addGoodPoint(){
-        Rectangle rectangle = new Rectangle(0,0,200,200);
-        QuadTree quadTree = new QuadTree(rectangle);
-        quadTree.addPoint(new Point(100,100));
+        BoundingBox bbox = new BoundingBox(0,0,200,200);
+        QuadTree quadTree = new QuadTree(bbox);
+        quadTree.addPoint(new Point2D(100,100));
 
         if ((quadTree.getNumItems() == 1)) {
             return;
