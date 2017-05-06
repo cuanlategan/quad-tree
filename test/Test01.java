@@ -1,5 +1,7 @@
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -8,28 +10,43 @@ import org.junit.Test;
  */
 public class Test01 {
 
+    private BoundingBox bbox;
+    private QuadTree quadTree;
+
+    @Before
+    public void buildQuadTree(){
+        bbox = new BoundingBox(0,0,200,200);
+        quadTree = new QuadTree(bbox);
+    }
+
+    @After
+    public void deleteQuadTree(){
+        bbox = null;
+        quadTree = null;
+    }
+
     @Test
     public void addBadPoint(){
-        BoundingBox bbox = new BoundingBox(0,0,200,200);
-        QuadTree quadTree = new QuadTree(bbox);
         quadTree.addPoint(new Point2D(400,400));
-
-        if ((quadTree.getNumItems() == 0)) {
-            return;
-        }
-        throw new AssertionError();
+        System.out.println(quadTree.getTotalSize());
+        assert (quadTree.getTotalSize() == 0);
     }
 
 
     @Test
     public void addGoodPoint(){
-        BoundingBox bbox = new BoundingBox(0,0,200,200);
-        QuadTree quadTree = new QuadTree(bbox);
         quadTree.addPoint(new Point2D(100,100));
+        assert( quadTree.getTotalSize() == 1 );
+    }
 
-        if ((quadTree.getNumItems() == 1)) {
-            return;
+    @Test
+    public void createChild(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(50,50));
         }
-        throw new AssertionError();
+        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+        assert( quadTree.getTotalSize() == 8 );
     }
 }

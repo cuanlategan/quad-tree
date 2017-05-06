@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class QuadTree {
 
     static final int MAX_ITEMS = 5;
+    static private int totalSize = 0;
 
     private ArrayList<Point2D> points = new ArrayList<Point2D>();
 
@@ -48,33 +49,33 @@ public class QuadTree {
     }
 
     private QuadTree createChildNode(Direction direction){
-        BoundingBox bbox = null;
+        BoundingBox childBox = null;
         QuadTree result = null;
 
         switch (direction) {
             case NorthWest:
-                bbox = new BoundingBox( bbox.getMinX(),
+                childBox = new BoundingBox( bbox.getMinX(),
                                         bbox.getMinY(),
                                   bbox.getWidth()/2,
                                   bbox.getHeight()/2 );
                 result = new QuadTree(bbox);
                 break;
             case NorthEast:
-                bbox = new BoundingBox( bbox.getWidth()/2,
+                childBox = new BoundingBox( bbox.getWidth()/2,
                                         bbox.getMinY(),
                                   bbox.getWidth()/2,
                                   bbox.getHeight()/2 );
                 result = new QuadTree(bbox);
                 break;
             case SouthEast:
-                bbox = new BoundingBox( bbox.getWidth()/2,
+                childBox = new BoundingBox( bbox.getWidth()/2,
                                         bbox.getHeight()/2,
                                         bbox.getWidth()/2,
                                         bbox.getHeight()/2 );
                 result = new QuadTree(bbox);
                 break;
             case SouthWest:
-                bbox = new BoundingBox(      bbox.getMinX(),
+                childBox = new BoundingBox(      bbox.getMinX(),
                                         bbox.getHeight()/2,
                                         bbox.getWidth()/2,
                                         bbox.getHeight()/2 );
@@ -88,47 +89,80 @@ public class QuadTree {
     public void addPoint(Point2D p){
         if (!bbox.contains(p)){
             // TODO throw exception here
-            System.out.println("addPoint something went wrong");
+            System.out.println("addPoint something went wrong, point not within bounds");
             return;
         }
 
-        if(getNumItems() <= MAX_ITEMS){
+        if(getNodeSize() < MAX_ITEMS){
             points.add(p);
+            totalSize++;
             return;
         }
 
-        if(getNumItems() == MAX_ITEMS){
+        //points.add(p);
+
+        if(getNodeSize() == MAX_ITEMS){
             Direction dir = getDirection(p);
             switch (dir) {
                 case NorthWest:
                     if(childNW == null){
                         childNW = createChildNode(dir);
-                    }
+                        childNW.addPoint(p);
+                        //balanceDownwards(childNW);
+                    } else childNW.addPoint(p);
                     break;
                 case NorthEast:
                     if(childNE == null){
                         childNE = createChildNode(dir);
-                    }
+                        childNE.addPoint(p);
+                        //balanceDownwards(childNE);
+                    } else childNE.addPoint(p);
                     break;
                 case SouthEast:
                     if(childSE == null){
                         childSE = createChildNode(dir);
-                    }
+                        childSE.addPoint(p);
+                        //balanceDownwards(childSE);
+                    } else childSE.addPoint(p);
                     break;
                 case SouthWest:
                     if(childSW == null){
                         childSW = createChildNode(dir);
-                    }
+                        childSW.addPoint(p);
+                        //balanceDownwards(childSW);
+                    } else childSW.addPoint(p);
                     break;
             }
         }
 
     }
 
-    public int getNumItems(){
+    /*
+    private boolean balanceDownwards(QuadTree child){
+        boolean result = false;
+        BoundingBox childBbox = child.getBbox();
+        for (Point2D p: points) {
+            if(childBbox.contains(p)) {
+                child.addPoint(p);
+                points.remove(p);
+                result = true;
+            }
+        }
+        return result;
+    }
+    */
+
+    private BoundingBox getBbox(){
+        return bbox;
+    }
+
+    public int getNodeSize(){
         return points.size();
     }
 
+    public int getTotalSize(){
+        return totalSize;
+    }
 
     private enum Direction{NorthWest, NorthEast, SouthEast, SouthWest}
 
