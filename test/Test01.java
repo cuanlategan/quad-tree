@@ -54,21 +54,81 @@ public class Test01 {
     }
 
     @Test
-    public void createGoodChild01(){
+    public void createGoodChildNW01(){
 
         for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
 
-            quadTree.addPoint(new Point2D(50,50));
+            quadTree.addPoint(new Point2D(0,0));
         }
         assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
     }
 
     @Test
-    public void createGoodChild02(){
+    public void createGoodChildNW02(){
 
         for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
 
-            quadTree.addPoint(new Point2D(50,50));
+            quadTree.addPoint(new Point2D(99,99));
+        }
+        assert( quadTree.getBranchSize() == 8 );
+    }
+
+    @Test
+    public void createGoodChildNE01(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(100,0));
+        }
+        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+    }
+
+    @Test
+    public void createGoodChildNE02(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(200,99));
+        }
+        assert( quadTree.getBranchSize() == 8 );
+    }
+
+    @Test
+    public void createGoodChildSE01(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(100,100));
+        }
+        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+    }
+
+    @Test
+    public void createGoodChildSE02(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        assert( quadTree.getBranchSize() == 8 );
+    }
+
+    @Test
+    public void createGoodChildSW01(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(0,100));
+        }
+        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+    }
+
+    @Test
+    public void createGoodChildSW02(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(99,200));
         }
         assert( quadTree.getBranchSize() == 8 );
     }

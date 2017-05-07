@@ -9,7 +9,6 @@ test {
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
-    dependsOn 'cleanTest'
 }
 
 sourceSets {

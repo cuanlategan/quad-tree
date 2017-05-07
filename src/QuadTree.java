@@ -28,6 +28,15 @@ public class QuadTree {
         this.bbox = bbox;
     }
 
+
+    /**
+     * Finds bearing that point falls under eg NorthWest, NorthEast.
+     * Western quadrants are divided by [0,max-width/2)
+     * North quadrants are divided by [0,max-height/2)
+     *
+     * @param p Point that falls in domain of branch
+     * @return Direction enumeration of where point lies.
+     */
     public Direction getDirection(Point2D p) {
 
         // TODO maybe add case for centre position
@@ -35,16 +44,16 @@ public class QuadTree {
                 && p.getY() < bbox.getMaxY()/2) {
             return Direction.NorthWest;
         }
-        if (p.getX() > bbox.getMaxX()/2
+        if (p.getX() >= bbox.getMaxX()/2
                 && p.getY() < bbox.getMaxY()/2) {
             return Direction.NorthEast;
         }
-        if (p.getX() > bbox.getMaxX()/2
-                && p.getY() > bbox.getMaxY()/2) {
+        if (p.getX() >= bbox.getMaxX()/2
+                && p.getY() >= bbox.getMaxY()/2) {
             return Direction.SouthEast;
         }
         if (p.getX() < bbox.getMaxX()/2
-                && p.getY() > bbox.getMaxY()/2) {
+                && p.getY() >= bbox.getMaxY()/2) {
             return Direction.SouthWest;
         }
 
