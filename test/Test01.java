@@ -1,6 +1,5 @@
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,43 +9,77 @@ import org.junit.Test;
  */
 public class Test01 {
 
-    private BoundingBox bbox;
     private QuadTree quadTree;
 
     @Before
     public void buildQuadTree(){
-        bbox = new BoundingBox(0,0,200,200);
-        quadTree = new QuadTree(bbox);
+        quadTree = new QuadTree(new BoundingBox(0,0,200,200));
     }
 
-    @After
-    public void deleteQuadTree(){
-        bbox = null;
-        quadTree = null;
+    @Test
+    public void getDirectionNW(){
+        QuadTree.Direction dir =  quadTree.getDirection(new Point2D(0,0));
+        assert (dir == QuadTree.Direction.NorthWest);
+    }
+
+    @Test
+    public void getDirectionNE(){
+        QuadTree.Direction dir =  quadTree.getDirection(new Point2D(200,0));
+        assert (dir == QuadTree.Direction.NorthEast);
+    }
+
+    @Test
+    public void getDirectionSE(){
+        QuadTree.Direction dir =  quadTree.getDirection(new Point2D(200,200));
+        assert (dir == QuadTree.Direction.SouthEast);
+    }
+
+    @Test
+    public void getDirectionSW(){
+        QuadTree.Direction dir =  quadTree.getDirection(new Point2D(0,200));
+        assert (dir == QuadTree.Direction.SouthWest);
     }
 
     @Test
     public void addBadPoint(){
         quadTree.addPoint(new Point2D(400,400));
-        System.out.println(quadTree.getTotalSize());
-        assert (quadTree.getTotalSize() == 0);
+        assert (quadTree.getBranchSize() == 0);
     }
 
 
     @Test
     public void addGoodPoint(){
         quadTree.addPoint(new Point2D(100,100));
-        assert( quadTree.getTotalSize() == 1 );
+        assert( quadTree.getBranchSize() == 1 );
     }
 
     @Test
-    public void createChild(){
+    public void createGoodChild01(){
 
         for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(50,50));
         }
         assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
-        assert( quadTree.getTotalSize() == 8 );
+    }
+
+    @Test
+    public void createGoodChild02(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        assert( quadTree.getBranchSize() == 8 );
+    }
+
+    @Test
+    public void createChildOfChild(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS + 6; i++) {
+
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        assert( quadTree.getBranchSize() == 11 );
     }
 }

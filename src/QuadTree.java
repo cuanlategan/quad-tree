@@ -2,6 +2,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -10,131 +11,122 @@ import java.util.ArrayList;
 public class QuadTree {
 
     static final int MAX_ITEMS = 5;
-    static private int totalSize = 0;
+    private int branchSize = 0;
 
-    private ArrayList<Point2D> points = new ArrayList<Point2D>();
+    private List<Point2D> points = new ArrayList<>();
 
     private QuadTree childNW = null;
     private QuadTree childNE = null;
     private QuadTree childSE = null;
     private QuadTree childSW = null;
 
+    public enum Direction {NorthWest, NorthEast, SouthEast, SouthWest}
 
     private BoundingBox bbox;
 
-    public QuadTree(BoundingBox bbox){
+    public QuadTree(BoundingBox bbox) {
         this.bbox = bbox;
     }
 
-    private Direction getDirection(Point2D p){
-        if(p.getX() < bbox.getMaxX() - bbox.getWidth()
-                && p.getX() < bbox.getMaxY() - bbox.getHeight()){
+    public Direction getDirection(Point2D p) {
+        if (p.getX() < bbox.getMaxX()/2
+                && p.getY() < bbox.getMaxY()/2) {
             return Direction.NorthWest;
         }
-        if(p.getX() > bbox.getMaxX() - bbox.getWidth()
-                && p.getX() < bbox.getMaxY() - bbox.getHeight()){
+        if (p.getX() > bbox.getMaxX()/2
+                && p.getY() < bbox.getMaxY()/2) {
             return Direction.NorthEast;
         }
-        if(p.getX() > bbox.getMaxX() - bbox.getWidth()
-                && p.getX() > bbox.getMaxY() - bbox.getHeight()){
+        if (p.getX() > bbox.getMaxX()/2
+                && p.getY() > bbox.getMaxY()/2) {
             return Direction.SouthEast;
         }
-        if(p.getX() < bbox.getMaxX() - bbox.getWidth()
-                && p.getX() > bbox.getMaxY() - bbox.getHeight()){
+        if (p.getX() < bbox.getMaxX()/2
+                && p.getY() > bbox.getMaxY()/2) {
             return Direction.SouthWest;
         }
 
         // Should not be reached
+        // TODO maybe add case for centre position
         return Direction.NorthWest;
     }
 
-    private QuadTree createChildNode(Direction direction){
-        BoundingBox childBox = null;
+    private QuadTree createChildNode(Direction direction) {
+        BoundingBox childBox;
         QuadTree result = null;
 
         switch (direction) {
             case NorthWest:
-                childBox = new BoundingBox( bbox.getMinX(),
-                                        bbox.getMinY(),
-                                  bbox.getWidth()/2,
-                                  bbox.getHeight()/2 );
-                result = new QuadTree(bbox);
+                childBox = new BoundingBox(bbox.getMinX(),
+                        bbox.getMinY(),
+                        bbox.getWidth() / 2,
+                        bbox.getHeight() / 2);
+                result = new QuadTree(childBox);
                 break;
             case NorthEast:
-                childBox = new BoundingBox( bbox.getWidth()/2,
-                                        bbox.getMinY(),
-                                  bbox.getWidth()/2,
-                                  bbox.getHeight()/2 );
-                result = new QuadTree(bbox);
+                childBox = new BoundingBox(bbox.getWidth() / 2,
+                        bbox.getMinY(),
+                        bbox.getWidth() / 2,
+                        bbox.getHeight() / 2);
+                result = new QuadTree(childBox);
                 break;
             case SouthEast:
-                childBox = new BoundingBox( bbox.getWidth()/2,
-                                        bbox.getHeight()/2,
-                                        bbox.getWidth()/2,
-                                        bbox.getHeight()/2 );
-                result = new QuadTree(bbox);
+                childBox = new BoundingBox(bbox.getWidth() / 2,
+                        bbox.getHeight() / 2,
+                        bbox.getWidth() / 2,
+                        bbox.getHeight() / 2);
+                result = new QuadTree(childBox);
                 break;
             case SouthWest:
-                childBox = new BoundingBox(      bbox.getMinX(),
-                                        bbox.getHeight()/2,
-                                        bbox.getWidth()/2,
-                                        bbox.getHeight()/2 );
-                result = new QuadTree(bbox);
+                childBox = new BoundingBox(bbox.getMinX(),
+                        bbox.getHeight() / 2,
+                        bbox.getWidth() / 2,
+                        bbox.getHeight() / 2);
+                result = new QuadTree(childBox);
                 break;
         }
 
         return result;
     }
 
-    public void addPoint(Point2D p){
-        if (!bbox.contains(p)){
+    public boolean addPoint(Point2D p) {
+        if (!bbox.contains(p)) {
             // TODO throw exception here
-            System.out.println("addPoint something went wrong, point not within bounds");
-            return;
+            // System.out.println("addPoint something went wrong, point not within bounds");
+            return false;
         }
 
-        if(getNodeSize() < MAX_ITEMS){
+        if (getNodeSize() < MAX_ITEMS) {
             points.add(p);
-            totalSize++;
-            return;
+            ++branchSize;
+            return true;
         }
 
         //points.add(p);
-
-        if(getNodeSize() == MAX_ITEMS){
+        boolean result = false;
+        if (getNodeSize() == MAX_ITEMS) {
             Direction dir = getDirection(p);
             switch (dir) {
                 case NorthWest:
-                    if(childNW == null){
-                        childNW = createChildNode(dir);
-                        childNW.addPoint(p);
-                        //balanceDownwards(childNW);
-                    } else childNW.addPoint(p);
+                    if (childNW == null) childNW = createChildNode(dir);
+                    if (childNW.addPoint(p)){ result = true; }
                     break;
                 case NorthEast:
-                    if(childNE == null){
-                        childNE = createChildNode(dir);
-                        childNE.addPoint(p);
-                        //balanceDownwards(childNE);
-                    } else childNE.addPoint(p);
+                    if (childNE == null) childNE = createChildNode(dir);
+                    if (childNE.addPoint(p)){ result = true; }
                     break;
                 case SouthEast:
-                    if(childSE == null){
-                        childSE = createChildNode(dir);
-                        childSE.addPoint(p);
-                        //balanceDownwards(childSE);
-                    } else childSE.addPoint(p);
+                    if (childSE == null) childSE = createChildNode(dir);
+                    if (childSE.addPoint(p)){ result = true; }
                     break;
                 case SouthWest:
-                    if(childSW == null){
-                        childSW = createChildNode(dir);
-                        childSW.addPoint(p);
-                        //balanceDownwards(childSW);
-                    } else childSW.addPoint(p);
+                    if (childSW == null) childSW = createChildNode(dir);
+                    if (childSW.addPoint(p)){ result = true; }
                     break;
             }
         }
-
+        if(result) ++branchSize;
+        return result;
     }
 
     /*
@@ -152,20 +144,17 @@ public class QuadTree {
     }
     */
 
-    private BoundingBox getBbox(){
+    private BoundingBox getBbox() {
         return bbox;
     }
 
-    public int getNodeSize(){
+    public int getNodeSize() {
         return points.size();
     }
 
-    public int getTotalSize(){
-        return totalSize;
+    public int getBranchSize() {
+        return branchSize;
     }
-
-    private enum Direction{NorthWest, NorthEast, SouthEast, SouthWest}
-
 
 
 }
