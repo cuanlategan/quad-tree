@@ -29,6 +29,8 @@ public class QuadTree {
     }
 
     public Direction getDirection(Point2D p) {
+
+        // TODO maybe add case for centre position
         if (p.getX() < bbox.getMaxX()/2
                 && p.getY() < bbox.getMaxY()/2) {
             return Direction.NorthWest;
@@ -46,11 +48,17 @@ public class QuadTree {
             return Direction.SouthWest;
         }
 
+        try {
+            throw new Exception("direction not found");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Should not be reached
-        // TODO maybe add case for centre position
         return Direction.NorthWest;
     }
 
+    // TODO write tests for this method
     private QuadTree createChildNode(Direction direction) {
         BoundingBox childBox;
         QuadTree result = null;
