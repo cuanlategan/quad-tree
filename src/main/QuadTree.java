@@ -166,6 +166,15 @@ public class QuadTree {
         return result;
     }
 
+    public List<Point2D> getAllPoints(){
+        List<Point2D> result = points;
+        if(childNW != null) result.addAll(childNW.getAllPoints());
+        if(childNE != null) result.addAll(childNE.getAllPoints());
+        if(childSE != null) result.addAll(childSE.getAllPoints());
+        if(childSW != null) result.addAll(childSW.getAllPoints());
+        return result;
+    }
+
     /*
     private boolean balanceDownwards(QuadTree child){
         boolean result = false;
