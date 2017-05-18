@@ -1,7 +1,7 @@
+package main;
+
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
-
-import java.nio.channels.UnresolvedAddressException;
 import java.util.ArrayList;
 import java.util.List;
 
