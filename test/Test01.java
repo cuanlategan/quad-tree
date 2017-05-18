@@ -3,6 +3,8 @@ import javafx.geometry.Point2D;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
+
 
 /**
  * Created by cuan on 5/4/17.
@@ -40,7 +42,13 @@ public class Test01 {
         assert (dir == QuadTree.Direction.SouthWest);
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
+    public void getBadDirection(){
+        QuadTree.Direction dir =  quadTree.getDirection(new Point2D(400,400));
+        assert (dir == null);
+    }
+
+    @Test(expected = RuntimeException.class)
     public void addBadPoint(){
         quadTree.addPoint(new Point2D(400,400));
         assert (quadTree.getBranchSize() == 0);
@@ -142,4 +150,183 @@ public class Test01 {
         }
         assert( quadTree.getBranchSize() == 11 );
     }
+
+    @Test
+    public void hasPointRoot(){
+        quadTree.addPoint(new Point2D(50,50));
+        assert (quadTree.hasPoint(new Point2D(50,50)));
+    }
+
+    @Test
+    public void hasPointNW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(50,50));
+        assert (quadTree.hasPoint(new Point2D(50,50)));
+    }
+
+    @Test
+    public void notHasPointNW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(50,50));
+        assertFalse (quadTree.hasPoint(new Point2D(55,55)));
+    }
+
+    @Test
+    public void hasPointNE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(100,50));
+        assert (quadTree.hasPoint(new Point2D(100,50)));
+    }
+    @Test
+    public void notHasPointNE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(100,50));
+        assertFalse (quadTree.hasPoint(new Point2D(105,55)));
+    }
+
+    @Test
+    public void hasPointSE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        quadTree.addPoint(new Point2D(100,150));
+        assert (quadTree.hasPoint(new Point2D(100,150)));
+    }
+
+    @Test
+    public void notHasPointSE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        quadTree.addPoint(new Point2D(100,150));
+        assertFalse(quadTree.hasPoint(new Point2D(105,155)));
+    }
+
+    @Test
+    public void hasPointSW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(50,150));
+        assert (quadTree.hasPoint(new Point2D(50,150)));
+    }
+
+    @Test
+    public void notHasPointSW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(50,150));
+        assertFalse(quadTree.hasPoint(new Point2D(55,155)));
+    }
+
+    @Test
+    public void getPointRoot(){
+        Point2D p = new Point2D(50,50);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(p);
+        assert (p == result);
+    }
+
+    @Test
+    public void getBadPointRoot(){
+        Point2D p = new Point2D(50,50);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(100,100));
+        assert (result == null);
+    }
+
+    @Test
+    public void getPointNW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        Point2D p = new Point2D(50,50);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(50,50));
+        assert (p == result);
+    }
+
+    @Test
+    public void notGetPointNW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        quadTree.addPoint(new Point2D(50,50));
+        assertFalse (quadTree.hasPoint(new Point2D(55,55)));
+    }
+
+    @Test
+    public void getPointNE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        Point2D p = new Point2D(100,50);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(100,50));
+        assert (p == result);
+    }
+    @Test
+    public void notGetPointNE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        Point2D p = new Point2D(100,50);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(105,55));
+        assert (result == null);
+    }
+
+    @Test
+    public void getPointSE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        Point2D p = new Point2D(100,150);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(100,150));
+        assert (p == result);
+    }
+
+    @Test
+    public void notGetPointSE(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(50,50));
+        }
+        Point2D p = new Point2D(100,150);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(105,155));
+        assert (result == null);
+    }
+
+    @Test
+    public void getPointSW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        Point2D p = new Point2D(50,150);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(50,150));
+        assert (p == result);
+    }
+
+    @Test
+    public void notGetPointSW(){
+        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+            quadTree.addPoint(new Point2D(200,200));
+        }
+        Point2D p = new Point2D(50,150);
+        quadTree.addPoint(p);
+        Point2D result = quadTree.getPoint(new Point2D(55,155));
+        assert (result == null);
+    }
+
 }

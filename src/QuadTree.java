@@ -1,6 +1,7 @@
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 
+import java.nio.channels.UnresolvedAddressException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,35 +40,96 @@ public class QuadTree {
      */
     public Direction getDirection(Point2D p) {
 
-        // TODO maybe add case for centre position
-        if (p.getX() < bbox.getMaxX()/2
-                && p.getY() < bbox.getMaxY()/2) {
+        final double x = p.getX();
+        final double y = p.getY();
+        final double bboxMaxX = bbox.getMaxX();
+        final double bboxMaxY = bbox.getMaxY();
+        final double bboxMinX = bbox.getMinX();
+        final double bboxMinY = bbox.getMinY();
+
+
+        if (x >= bboxMinX && x < bboxMaxX/2 &&
+            y >= bboxMinY && y < bboxMaxY/2) {
             return Direction.NorthWest;
         }
-        if (p.getX() >= bbox.getMaxX()/2
-                && p.getY() < bbox.getMaxY()/2) {
+        if (x >= bboxMaxX/2 && x <= bboxMaxX &&
+            y >= bboxMinY && y < bboxMaxY/2) {
             return Direction.NorthEast;
         }
-        if (p.getX() >= bbox.getMaxX()/2
-                && p.getY() >= bbox.getMaxY()/2) {
+        if (x >= bboxMaxX/2 && x <= bboxMaxX &&
+            y >= bboxMaxY/2 && y <= bboxMaxY ){
             return Direction.SouthEast;
         }
-        if (p.getX() < bbox.getMaxX()/2
-                && p.getY() >= bbox.getMaxY()/2) {
+        if (x >= bboxMinX && x < bboxMaxX/2 &&
+            y >= bboxMaxY/2 && y <= bboxMaxY ){
             return Direction.SouthWest;
         }
 
-        try {
-            throw new Exception("direction not found");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        throw new RuntimeException("getDirection: direction not found");
 
-        // Should not be reached
-        return Direction.NorthWest;
     }
 
-    // TODO write tests for this method
+
+    public boolean hasPoint(Point2D p){
+        if(points.contains(p)) return true;
+        else if(childNW != null && childNW.hasPoint(p)) return true;
+        else if(childNE != null && childNE.hasPoint(p)) return true;
+        else if(childSE != null && childSE.hasPoint(p)) return true;
+        else if(childSW != null && childSW.hasPoint(p)) return true;
+
+        return false;
+    }
+
+    public Point2D getPoint(Point2D p){
+        if(points.contains(p)) return points.get(points.indexOf(p));
+        else if(childNW != null && childNW.hasPoint(p)) return childNW.getPoint(p);
+        else if(childNE != null && childNE.hasPoint(p)) return childNE.getPoint(p);
+        else if(childSE != null && childSE.hasPoint(p)) return childSE.getPoint(p);
+        else if(childSW != null && childSW.hasPoint(p)) return childSW.getPoint(p);
+
+        return null;
+    }
+
+    public boolean addPoint(Point2D p) {
+
+        if (!bbox.contains(p)) {
+            throw new RuntimeException("addPoint: point not within bounds");
+        }
+
+        if (getNodeSize() < MAX_ITEMS) {
+            points.add(p);
+            ++branchSize;
+            return true;
+        }
+
+
+        boolean result = false;
+        if (getNodeSize() == MAX_ITEMS) {
+            Direction dir = getDirection(p);
+            switch (dir) {
+                case NorthWest:
+                    if (childNW == null) childNW = createChildNode(dir);
+                    if (childNW.addPoint(p)){ result = true; }
+                    break;
+                case NorthEast:
+                    if (childNE == null) childNE = createChildNode(dir);
+                    if (childNE.addPoint(p)){ result = true; }
+                    break;
+                case SouthEast:
+                    if (childSE == null) childSE = createChildNode(dir);
+                    if (childSE.addPoint(p)){ result = true; }
+                    break;
+                case SouthWest:
+                    if (childSW == null) childSW = createChildNode(dir);
+                    if (childSW.addPoint(p)){ result = true; }
+                    break;
+            }
+        }
+        if(result) ++branchSize;
+
+        return result;
+    }
+
     private QuadTree createChildNode(Direction direction) {
         BoundingBox childBox;
         QuadTree result = null;
@@ -103,46 +165,6 @@ public class QuadTree {
                 break;
         }
 
-        return result;
-    }
-
-    public boolean addPoint(Point2D p) {
-        if (!bbox.contains(p)) {
-            // TODO throw exception here
-            // System.out.println("addPoint something went wrong, point not within bounds");
-            return false;
-        }
-
-        if (getNodeSize() < MAX_ITEMS) {
-            points.add(p);
-            ++branchSize;
-            return true;
-        }
-
-        //points.add(p);
-        boolean result = false;
-        if (getNodeSize() == MAX_ITEMS) {
-            Direction dir = getDirection(p);
-            switch (dir) {
-                case NorthWest:
-                    if (childNW == null) childNW = createChildNode(dir);
-                    if (childNW.addPoint(p)){ result = true; }
-                    break;
-                case NorthEast:
-                    if (childNE == null) childNE = createChildNode(dir);
-                    if (childNE.addPoint(p)){ result = true; }
-                    break;
-                case SouthEast:
-                    if (childSE == null) childSE = createChildNode(dir);
-                    if (childSE.addPoint(p)){ result = true; }
-                    break;
-                case SouthWest:
-                    if (childSW == null) childSW = createChildNode(dir);
-                    if (childSW.addPoint(p)){ result = true; }
-                    break;
-            }
-        }
-        if(result) ++branchSize;
         return result;
     }
 
