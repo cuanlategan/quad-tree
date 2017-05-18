@@ -1,5 +1,3 @@
-package main;
-
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import java.util.ArrayList;
