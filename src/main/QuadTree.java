@@ -9,8 +9,7 @@ import java.util.List;
  */
 public class QuadTree {
 
-    static final int MAX_ITEMS = 5;
-    private int branchSize = 0;
+    public final int MAX_ITEMS;
 
     private List<Point2D> points = new ArrayList<>();
 
@@ -25,6 +24,12 @@ public class QuadTree {
 
     public QuadTree(BoundingBox bbox) {
         this.bbox = bbox;
+        MAX_ITEMS = 5;
+    }
+
+    public QuadTree(BoundingBox bbox, int maxItems) {
+        this.bbox = bbox;
+        MAX_ITEMS = maxItems;
     }
 
 
@@ -101,19 +106,21 @@ public class QuadTree {
     public boolean addPoint(Point2D p) {
 
         if (!bbox.contains(p)) {
-            throw new RuntimeException("addPoint: point not within bounds x: "+p.getX()+" y: "+p.getY());
+            String error = "addPoint: point(x:" + p.getX() + " y:" + p.getY() + ") ";
+            error += "not within bounds minX:" + bbox.getMinX() + " maxX" + bbox.getMaxX();
+            error += " minY:" + bbox.getMinY() + " maxY:" + bbox.getMaxY() + "\n";
+            throw new RuntimeException(error);
         }
 
         if (getNodeSize() < MAX_ITEMS) {
             points.add(p);
-            ++branchSize;
+            //if(points.size() == MAX_ITEMS) balanceDown();
             return true;
         }
 
-
         boolean result = false;
-        if (getNodeSize() == MAX_ITEMS) {
-            Direction dir = getDirection(p);
+        Direction dir = getDirection(p);
+        if (getNodeSize() >= MAX_ITEMS) {
             switch (dir) {
                 case NorthWest:
                     if (childNW == null) childNW = createChildNode(dir);
@@ -133,10 +140,11 @@ public class QuadTree {
                     break;
             }
         }
-        if(result) ++branchSize;
+
 
         return result;
     }
+
 
     private QuadTree createChildNode(Direction direction) {
         BoundingBox childBox;
@@ -151,22 +159,22 @@ public class QuadTree {
                 result = new QuadTree(childBox);
                 break;
             case NorthEast:
-                childBox = new BoundingBox(bbox.getWidth() / 2,
+                childBox = new BoundingBox(bbox.getMinX() + bbox.getWidth() / 2,
                         bbox.getMinY(),
                         bbox.getWidth() / 2,
                         bbox.getHeight() / 2);
                 result = new QuadTree(childBox);
                 break;
             case SouthEast:
-                childBox = new BoundingBox(bbox.getWidth() / 2,
-                        bbox.getHeight() / 2,
+                childBox = new BoundingBox(bbox.getMinX() + bbox.getWidth() / 2,
+                        bbox.getMinY() + bbox.getHeight() / 2,
                         bbox.getWidth() / 2,
                         bbox.getHeight() / 2);
                 result = new QuadTree(childBox);
                 break;
             case SouthWest:
                 childBox = new BoundingBox(bbox.getMinX(),
-                        bbox.getHeight() / 2,
+                        bbox.getMinY() + bbox.getHeight() / 2,
                         bbox.getWidth() / 2,
                         bbox.getHeight() / 2);
                 result = new QuadTree(childBox);
@@ -200,16 +208,19 @@ public class QuadTree {
     }
     */
 
-    private BoundingBox getBbox() {
-        return bbox;
-    }
 
     public int getNodeSize() {
         return points.size();
     }
 
     public int getBranchSize() {
-        return branchSize;
+        int result = points.size();
+        if(childNW != null) result += childNW.getBranchSize();
+        if(childNE != null) result += childNE.getBranchSize();
+        if(childSE != null) result += childSE.getBranchSize();
+        if(childSW != null) result += childSW.getBranchSize();
+
+        return result;
     }
 
 

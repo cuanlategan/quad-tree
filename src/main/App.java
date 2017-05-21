@@ -49,11 +49,12 @@ public class App extends Application {
             Point2D p = new Point2D(x, y);
             quadTree.addPoint(p);
             System.out.println(p.getX() + "  " + p.getY() + "\n");
+            Point2D pointAdded = quadTree.getPoint(p); // Use quadTree for getting point position
             Circle circle = new Circle(5, Color.web("black"));
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStrokeWidth(4);
-            circle.setCenterX(p.getX());
-            circle.setCenterY(p.getY());
+            circle.setCenterX(pointAdded.getX());
+            circle.setCenterY(pointAdded.getY());
             circles.getChildren().add(circle);
         });
 

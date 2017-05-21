@@ -63,18 +63,17 @@ public class Test01 {
 
     @Test
     public void createGoodChildNW01(){
-
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(0,0));
         }
-        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+        assert( quadTree.getNodeSize() == quadTree.MAX_ITEMS );
     }
 
     @Test
     public void createGoodChildNW02(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(99,99));
         }
@@ -84,28 +83,29 @@ public class Test01 {
     // Tests rebalancing of tree as MAX_ITEMS is reached
     @Test
     public void createGoodChildOfChildNW01(){
-
-        for (int i = 0; i < QuadTree.MAX_ITEMS * 5; i++) {
-
-            quadTree.addPoint(new Point2D(99,99));
+        QuadTree qt = new QuadTree(new BoundingBox(0,0, 200,200),8);
+        for (int i = 0; i < qt.MAX_ITEMS * 5; i++) {
+            qt.addPoint(new Point2D(99,99));
+            //assert( quadTree.getBranchSize() == i+1 );
         }
-        assert( quadTree.getBranchSize() == QuadTree.MAX_ITEMS*5 );
+        System.out.println("expecting branch size: "+ qt.MAX_ITEMS * 5 + " got: " + qt.getBranchSize());
+        assert( qt.getBranchSize() == qt.MAX_ITEMS * 5 );
     }
 
     @Test
     public void createGoodChildNE01(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(100,0));
         }
-        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+        assert( quadTree.getNodeSize() == quadTree.MAX_ITEMS );
     }
 
     @Test
     public void createGoodChildNE02(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(200,99));
         }
@@ -115,17 +115,17 @@ public class Test01 {
     @Test
     public void createGoodChildSE01(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(100,100));
         }
-        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+        assert( quadTree.getNodeSize() == quadTree.MAX_ITEMS );
     }
 
     @Test
     public void createGoodChildSE02(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(200,200));
         }
@@ -135,17 +135,17 @@ public class Test01 {
     @Test
     public void createGoodChildSW01(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(0,100));
         }
-        assert( quadTree.getNodeSize() == QuadTree.MAX_ITEMS );
+        assert( quadTree.getNodeSize() == quadTree.MAX_ITEMS );
     }
 
     @Test
     public void createGoodChildSW02(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 3; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 3; i++) {
 
             quadTree.addPoint(new Point2D(99,200));
         }
@@ -155,7 +155,7 @@ public class Test01 {
     @Test
     public void createChildOfChild(){
 
-        for (int i = 0; i < QuadTree.MAX_ITEMS + 6; i++) {
+        for (int i = 0; i < quadTree.MAX_ITEMS + 6; i++) {
 
             quadTree.addPoint(new Point2D(50,50));
         }
@@ -170,7 +170,7 @@ public class Test01 {
 
     @Test
     public void hasPointNW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(50,50));
@@ -179,7 +179,7 @@ public class Test01 {
 
     @Test
     public void notHasPointNW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(50,50));
@@ -188,7 +188,7 @@ public class Test01 {
 
     @Test
     public void hasPointNE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(100,50));
@@ -196,7 +196,7 @@ public class Test01 {
     }
     @Test
     public void notHasPointNE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(100,50));
@@ -205,7 +205,7 @@ public class Test01 {
 
     @Test
     public void hasPointSE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(50,50));
         }
         quadTree.addPoint(new Point2D(100,150));
@@ -214,7 +214,7 @@ public class Test01 {
 
     @Test
     public void notHasPointSE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(50,50));
         }
         quadTree.addPoint(new Point2D(100,150));
@@ -223,7 +223,7 @@ public class Test01 {
 
     @Test
     public void hasPointSW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(50,150));
@@ -232,7 +232,7 @@ public class Test01 {
 
     @Test
     public void notHasPointSW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(50,150));
@@ -257,7 +257,7 @@ public class Test01 {
 
     @Test
     public void getPointNW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         Point2D p = new Point2D(50,50);
@@ -268,7 +268,7 @@ public class Test01 {
 
     @Test
     public void notGetPointNW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         quadTree.addPoint(new Point2D(50,50));
@@ -277,7 +277,7 @@ public class Test01 {
 
     @Test
     public void getPointNE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         Point2D p = new Point2D(100,50);
@@ -287,7 +287,7 @@ public class Test01 {
     }
     @Test
     public void notGetPointNE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         Point2D p = new Point2D(100,50);
@@ -298,7 +298,7 @@ public class Test01 {
 
     @Test
     public void getPointSE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(50,50));
         }
         Point2D p = new Point2D(100,150);
@@ -309,7 +309,7 @@ public class Test01 {
 
     @Test
     public void notGetPointSE(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(50,50));
         }
         Point2D p = new Point2D(100,150);
@@ -320,7 +320,7 @@ public class Test01 {
 
     @Test
     public void getPointSW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         Point2D p = new Point2D(50,150);
@@ -331,7 +331,7 @@ public class Test01 {
 
     @Test
     public void notGetPointSW(){
-        for (int i = 0; i <= QuadTree.MAX_ITEMS; i++) {
+        for (int i = 0; i <= quadTree.MAX_ITEMS; i++) {
             quadTree.addPoint(new Point2D(200,200));
         }
         Point2D p = new Point2D(50,150);
