@@ -80,10 +80,20 @@ public class QuadTree {
 
     public Point2D getPoint(Point2D p){
         if(points.contains(p)) return points.get(points.indexOf(p));
-        else if(childNW != null && childNW.hasPoint(p)) return childNW.getPoint(p);
-        else if(childNE != null && childNE.hasPoint(p)) return childNE.getPoint(p);
-        else if(childSE != null && childSE.hasPoint(p)) return childSE.getPoint(p);
-        else if(childSW != null && childSW.hasPoint(p)) return childSW.getPoint(p);
+        switch (getDirection(p)) {
+            case NorthWest:
+                if(childNW != null && childNW.hasPoint(p)) return childNW.getPoint(p);
+                break;
+            case NorthEast:
+                if(childNE != null && childNE.hasPoint(p)) return childNE.getPoint(p);
+                break;
+            case SouthEast:
+                if(childSE != null && childSE.hasPoint(p)) return childSE.getPoint(p);
+                break;
+            case SouthWest:
+                if(childSW != null && childSW.hasPoint(p)) return childSW.getPoint(p);
+                break;
+        }
 
         return null;
     }
@@ -91,7 +101,7 @@ public class QuadTree {
     public boolean addPoint(Point2D p) {
 
         if (!bbox.contains(p)) {
-            throw new RuntimeException("addPoint: point not within bounds");
+            throw new RuntimeException("addPoint: point not within bounds x: "+p.getX()+" y: "+p.getY());
         }
 
         if (getNodeSize() < MAX_ITEMS) {

@@ -81,6 +81,17 @@ public class Test01 {
         assert( quadTree.getBranchSize() == 8 );
     }
 
+    // Tests rebalancing of tree as MAX_ITEMS is reached
+    @Test
+    public void createGoodChildOfChildNW01(){
+
+        for (int i = 0; i < QuadTree.MAX_ITEMS * 5; i++) {
+
+            quadTree.addPoint(new Point2D(99,99));
+        }
+        assert( quadTree.getBranchSize() == QuadTree.MAX_ITEMS*5 );
+    }
+
     @Test
     public void createGoodChildNE01(){
 

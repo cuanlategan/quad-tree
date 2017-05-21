@@ -44,7 +44,9 @@ public class App extends Application {
         btn.setTranslateX(width/2 - btn.getWidth()/2);
         btn.setTranslateY(height+50);
         btn.setOnAction(event -> {
-            Point2D p = new Point2D(Math.random() * 600, Math.random() * 800);
+            double x = Math.floor(Math.random()*width);
+            double y = Math.floor(Math.random()*height);
+            Point2D p = new Point2D(x, y);
             quadTree.addPoint(p);
             System.out.println(p.getX() + "  " + p.getY() + "\n");
             Circle circle = new Circle(5, Color.web("black"));
