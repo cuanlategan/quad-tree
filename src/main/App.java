@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 
 
 public class App extends Application {
-    private final double width = 600;
-    private final double height = 800;
+    private final double width = 200;
+    private final double height = 200;
     private final QuadTree quadTree = new QuadTree(new BoundingBox(0,0, width, height));
 
     public static void main(String[] args){
@@ -32,11 +32,9 @@ public class App extends Application {
         Group scene = new Group(new Group(new Rectangle(width,height,Color.WHITE), circles));
         scene.setTranslateX(25);
         scene.setTranslateY(25);
-        scene.addEventHandler(MouseEvent.ANY, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                //System.out.println("mouse");
-            }
+
+        scene.addEventHandler(MouseEvent.ANY, event -> {
+            //System.out.println("mouse");
         });
 
         Button btn = new Button();
@@ -49,12 +47,12 @@ public class App extends Application {
             Point2D p = new Point2D(x, y);
             quadTree.addPoint(p);
             System.out.println(p.getX() + "  " + p.getY() + "\n");
-            Point2D pointAdded = quadTree.getPoint(p); // Use quadTree for getting point position
-            Circle circle = new Circle(5, Color.web("black"));
+            //Point2D pointAdded = quadTree.getPoint(p); // Use quadTree for getting point position
+            Circle circle = new Circle(2, Color.web("black"));
             circle.setStrokeType(StrokeType.OUTSIDE);
             circle.setStrokeWidth(4);
-            circle.setCenterX(pointAdded.getX());
-            circle.setCenterY(pointAdded.getY());
+            //circle.setCenterX(pointAdded.getX());
+            //circle.setCenterY(pointAdded.getY());
             circles.getChildren().add(circle);
         });
 
