@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 public class App extends Application {
     private final double width = 600;
     private final double height = 800;
-    private final QuadTree quadTree = new QuadTree(new BoundingBox(0,0, width, height));
 
     public static void main(String[] args){
         launch(args);
