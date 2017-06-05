@@ -76,9 +76,10 @@ public class Test01 {
 
     @Test
     public void addPoint3(){
-        for(int i = 0; i < 26; i++){
+        for(int i = 0; i < 35; i++){
             QuadTree.Point p1 = quadTree.new Point(100, 100);
             quadTree.addPoint(p1);
+            System.out.println("in test:" + quadTree.depth());
             assert(quadTree.size() == i+1);
         }
     }

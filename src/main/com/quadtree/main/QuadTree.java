@@ -57,17 +57,16 @@ public class QuadTree {
             this.R_WIDTH = R_WIDTH;
             this.R_HEIGHT = R_HEIGHT;
             this.DEPTH = DEPTH;
+            //System.out.println(DEPTH);
         }
 
         @Override
         public String toString(){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Node num-points: " + points.size());
-            sb.append(" centreX:" + centre.getX());
-            sb.append(" centreY:" + centre.getY());
-            sb.append(" r_width:" + R_WIDTH);
-            sb.append(" r_height:" + R_HEIGHT);
-            return sb.toString();
+            return ("Node num-points: " + points.size()) +
+                    " centreX:" + centre.getX() +
+                    " centreY:" + centre.getY() +
+                    " r_width:" + R_WIDTH +
+                    " r_height:" + R_HEIGHT;
         }
     }
 
@@ -75,15 +74,11 @@ public class QuadTree {
     private final Node root;
     private final int NODE_MAX_SIZE;
 
-    QuadTree(int width,
-             int height) {
+    QuadTree(int width, int height) {
         this(5, width, height);
     }
 
-
-    QuadTree(int NODE_MAX_SIZE,
-             int width,
-             int height) {
+    QuadTree(int NODE_MAX_SIZE, int width, int height) {
         this.NODE_MAX_SIZE = NODE_MAX_SIZE;
         Point centre = new Point(width / 2, height / 2);
         this.root = new Node(centre, width, height, 1);
@@ -99,7 +94,17 @@ public class QuadTree {
         if(node.childNW == null){
             return 1;
         }
-        return 1 + depth(node.childNW);
+
+        final int nw = depth(node.childNW);
+        final int ne = depth(node.childNE);
+        final int se = depth(node.childSE);
+        final int sw = depth(node.childSW);
+
+        final int max = Math.max(nw,
+                                 Math.max(ne,
+                                    Math.max(se, sw)));
+
+        return 1 + max;
     }
 
     public int size() {
@@ -130,7 +135,8 @@ public class QuadTree {
             System.out.println("not within bounds");
             System.out.println(node);
             System.out.println(point);
-            System.out.println("Depth: "+ depth());
+            int dep = depth();
+            System.out.println("Depth: "+ dep);
             System.out.println("Depth: "+ node.DEPTH);
             System.out.println();
         }
