@@ -39,7 +39,7 @@ public class App extends Application {
         });
 
         Button btn = new Button();
-        btn.setText("Add Point");
+        btn.setText("Add Point2D");
         btn.setTranslateX(width/2 - btn.getWidth()/2);
         btn.setTranslateY(height+50);
         btn.setOnAction(event -> {

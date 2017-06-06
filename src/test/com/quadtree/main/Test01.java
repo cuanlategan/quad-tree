@@ -1,17 +1,12 @@
 package com.quadtree.main;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 
-
-/**
- * Created by cuan on 5/4/17.
- */
 public class Test01 {
 
-    QuadTree quadTree;
+    private QuadTree quadTree;
 
     @Before
     public void runBefore(){
@@ -20,11 +15,11 @@ public class Test01 {
 
     @Test
     public void addPoint(){
-        QuadTree.Point p1 = quadTree.new Point(100, 400);
-        QuadTree.Point p2 = quadTree.new Point(200, 400);
-        QuadTree.Point p3 = quadTree.new Point(300, 400);
-        QuadTree.Point p4 = quadTree.new Point(400, 400);
-        QuadTree.Point p5 = quadTree.new Point(400, 100);
+        QuadTree.Point2D p1 = quadTree.new Point2D(100, 400);
+        QuadTree.Point2D p2 = quadTree.new Point2D(200, 400);
+        QuadTree.Point2D p3 = quadTree.new Point2D(300, 400);
+        QuadTree.Point2D p4 = quadTree.new Point2D(400, 400);
+        QuadTree.Point2D p5 = quadTree.new Point2D(400, 100);
 
         assert(quadTree.size() == 0);
         quadTree.addPoint(p1);
@@ -46,28 +41,28 @@ public class Test01 {
 
         for(int i = 0; i < 50; i++){
             ++count;
-            QuadTree.Point p1 = quadTree.new Point(100, 100);
+            QuadTree.Point2D p1 = quadTree.new Point2D(100, 100);
             quadTree.addPoint(p1);
             assert(quadTree.size() == count);
         }
 
         for(int i = 0; i < 50; i++){
             ++count;
-            QuadTree.Point p1 = quadTree.new Point(400, 100);
+            QuadTree.Point2D p1 = quadTree.new Point2D(400, 100);
             quadTree.addPoint(p1);
             assert(quadTree.size() == count);
         }
 
         for(int i = 0; i < 50; i++){
             ++count;
-            QuadTree.Point p1 = quadTree.new Point(400, 400);
+            QuadTree.Point2D p1 = quadTree.new Point2D(400, 400);
             quadTree.addPoint(p1);
             assert(quadTree.size() == count);
         }
 
         for(int i = 0; i < 50; i++){
             ++count;
-            QuadTree.Point p1 = quadTree.new Point(100, 400);
+            QuadTree.Point2D p1 = quadTree.new Point2D(100, 400);
             quadTree.addPoint(p1);
             assert(quadTree.size() == count);
         }
@@ -76,11 +71,48 @@ public class Test01 {
 
     @Test
     public void addPoint3(){
-        for(int i = 0; i < 35; i++){
-            QuadTree.Point p1 = quadTree.new Point(100, 100);
+        quadTree = new QuadTree(5, 800, 800);
+        for(int i = 0; i < 500; i++){
+            QuadTree.Point2D p1 = quadTree.new Point2D(100, 100);
             quadTree.addPoint(p1);
-            System.out.println("in test:" + quadTree.depth());
             assert(quadTree.size() == i+1);
+        }
+    }
+
+    @Test
+    public void testBoundsPredicates(){
+        QuadTree.Point2D point = quadTree.new Point2D(100, 100);
+        QuadTree.Point2D center = quadTree.new Point2D(87, 87);
+        QuadTree.Node node = quadTree.new Node(center, 12,12,7);
+
+        if(QuadTree.liesNW(node).test(point)) {
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
+
+        if(QuadTree.liesNE(node).test(point)){
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
+
+        if(QuadTree.liesSE(node).test(point)){
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
+
+        if(QuadTree.liesSW(node).test(point)){
+            System.out.println(true);
+        } else {
+            System.out.println(false);
+        }
+
+        if(QuadTree.checkBounds(node, point)){
+            System.out.println(true);
+        } else {
+            System.out.println(false);
         }
     }
 
