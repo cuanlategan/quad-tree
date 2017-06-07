@@ -1,7 +1,14 @@
 package com.quadtree.main;
 
+import com.quadtree.main.QuadTree.Point2D;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.*;
+
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class Test01 {
@@ -80,40 +87,38 @@ public class Test01 {
     }
 
     @Test
-    public void testBoundsPredicates(){
+    public void testBoundsPredicates() {
         QuadTree.Point2D point = quadTree.new Point2D(100, 100);
         QuadTree.Point2D center = quadTree.new Point2D(87, 87);
-        QuadTree.Node node = quadTree.new Node(center, 12,12,7);
+        QuadTree.Node node = quadTree.new Node(center, 12, 12, 7);
 
-        if(QuadTree.liesNW(node).test(point)) {
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
+        assertFalse("point should not of lied in node", QuadTree.liesNW(node).test(point));
+        assertFalse("point should not of lied in node", QuadTree.liesNE(node).test(point));
+        assertFalse("point should not of lied in node", QuadTree.liesSE(node).test(point));
+        assertFalse("point should not of lied in node", QuadTree.liesSW(node).test(point));
+        assertFalse("point should not of lied in node", QuadTree.checkBounds(node, point));
+    }
 
-        if(QuadTree.liesNE(node).test(point)){
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
+    @Test
+    public void testPointComparable(){
+        Point2D p1 = quadTree.new Point2D(0,0);
+        Point2D p2 = quadTree.new Point2D(1,0);
+        Point2D p3 = quadTree.new Point2D(0,1);
+        Point2D p4 = quadTree.new Point2D(1,1);
+        Point2D p5 = quadTree.new Point2D(1,2);
+        Point2D p6 = quadTree.new Point2D(1,2);
 
-        if(QuadTree.liesSE(node).test(point)){
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
+        ArrayList<Point2D> list =  new ArrayList<>(Arrays.asList(p6, p5, p4, p3, p2, p1));
+        Collections.shuffle(list);
+        list.sort(Comparator.naturalOrder());
 
-        if(QuadTree.liesSW(node).test(point)){
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
-
-        if(QuadTree.checkBounds(node, point)){
-            System.out.println(true);
-        } else {
-            System.out.println(false);
-        }
+        assertTrue("Point returned from list out of order: " +p1, p1 == list.get(0));
+        assertTrue("Point returned from list out of order: " +p2, p2 == list.get(1));
+        assertTrue("Point returned from list out of order: " +p3, p3 == list.get(2));
+        assertTrue("Point returned from list out of order: " +p4, p4 == list.get(3));
+        assertTrue("Point returned from list out of order: " +p5, p5 == list.get(4) || p5 == list.get(5));
+        assertTrue("Point returned from list out of order: " +p6, p6 == list.get(5) || p6 == list.get(4));
+        assertTrue("Point comparison should return 0", p5.compareTo(p6) == 0);
     }
 
 }

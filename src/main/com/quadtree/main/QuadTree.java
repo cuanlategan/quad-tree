@@ -209,8 +209,8 @@ public class QuadTree {
 
         final float xPos = node.centre.getX();
         final float yPos = node.centre.getY();
-        final float rHeight = node.R_HEIGHT / 2;
-        final float rWidth = node.R_WIDTH / 2;
+        final float rHeight = node.R_HEIGHT/2;
+        final float rWidth = node.R_WIDTH/2;
 
         Point2D c_nw = new Point2D(xPos - rWidth, yPos - rHeight);
         node.childNW = new Node(c_nw, rWidth, rHeight, node.DEPTH+1);
@@ -235,9 +235,28 @@ public class QuadTree {
         float minBoundY = node.centre.getY() - node.R_HEIGHT;
         float maxBoundY = node.centre.getY();
 
-        // TODO use Float.compareTo to prevent edge case issues
+        return point -> {
+            final float px = point.getX();
+            final float py = point.getY();
+            final boolean b = (Float.compare(minBoundX, px) == -1 ||
+                               Float.compare(minBoundX, px) == 0)
+                               &&
+                              (Float.compare(px, maxBoundX) == -1 ||
+                               Float.compare(px, maxBoundX) == 0)
+                               &&
+                              (Float.compare(minBoundY, py) == -1 ||
+                               Float.compare(minBoundY, py) == 0)
+                               &&
+                              (Float.compare(py, maxBoundY) == -1 ||
+                               Float.compare(py, maxBoundY) == 0);
+            return b;
+        };
+
+        /*
         return point -> minBoundX <= point.getX() && point.getX() <= maxBoundX &&
                         minBoundY <= point.getY() && point.getY() <= maxBoundY;
+        */
+
 
         /*
         int nodeX = node.centre.x;
@@ -255,9 +274,27 @@ public class QuadTree {
         float minBoundY = node.centre.getY() - node.R_HEIGHT;
         float maxBoundY = node.centre.getY();
 
-        // TODO use Float.compareTo to prevent edge case issues
+
+        return point -> {
+            final float px = point.getX();
+            final float py = point.getY();
+            final boolean b =  Float.compare(minBoundX, px) == -1
+                                &&
+                              (Float.compare(px, maxBoundX) == -1 ||
+                               Float.compare(px, maxBoundX) == 0)
+                                &&
+                              (Float.compare(minBoundY, py) == -1 ||
+                               Float.compare(minBoundY, py) == 0)
+                                &&
+                              (Float.compare(py, maxBoundY) == -1 ||
+                               Float.compare(py, maxBoundY) == 0);
+            return b;
+        };
+
+        /*
         return point -> minBoundX < point.getX()  && point.getX() <= maxBoundX &&
                         minBoundY <= point.getY() && point.getY() <= maxBoundY;
+        */
 
         /*
         int nodeX = node.centre.x;
@@ -274,9 +311,25 @@ public class QuadTree {
         float minBoundY = node.centre.getY();
         float maxBoundY = node.centre.getY() + node.R_HEIGHT;
 
-        // TODO use Float.compareTo to prevent edge case issues
+        return point -> {
+            final float px = point.getX();
+            final float py = point.getY();
+            final boolean b = (Float.compare(minBoundX, px) == -1
+                               &&
+                               (Float.compare(px, maxBoundX) == -1 ||
+                                Float.compare(px, maxBoundX) == 0)
+                               &&
+                                Float.compare(minBoundY, py) == -1
+                               &&
+                              (Float.compare(py, maxBoundY) == -1 ||
+                               Float.compare(py, maxBoundY) == 0));
+            return b;
+        };
+
+        /*
         return point -> minBoundX < point.getX() && point.getX() <= maxBoundX &&
                         minBoundY < point.getY() && point.getY() <= maxBoundY;
+        */
 
         /*
         int nodeX = node.centre.x;
@@ -293,9 +346,27 @@ public class QuadTree {
         float minBoundY = node.centre.getY();
         float maxBoundY = node.centre.getY() + node.R_HEIGHT;
 
-        // TODO use Float.compareTo to prevent edge case issues
+        return point -> {
+            final float px = point.getX();
+            final float py = point.getY();
+            final boolean b = (Float.compare(minBoundX, px) == -1 ||
+                               Float.compare(minBoundX, px) == 0)
+                               &&
+                               (Float.compare(px, maxBoundX) == -1 ||
+                                Float.compare(px, maxBoundX) == 0)
+                               &&
+                               Float.compare(minBoundY, py) == -1
+                               &&
+                               (Float.compare(py, maxBoundY) == -1 ||
+                                Float.compare(py, maxBoundY) == 0);
+            return b;
+        };
+
+        /*
         return point -> minBoundX <= point.getX() && point.getX() <= maxBoundX &&
                 minBoundY < point.getY() && point.getY() <= maxBoundY;
+
+        */
 
         /*
         int nodeX = node.centre.x;
